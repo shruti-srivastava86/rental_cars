@@ -36,9 +36,10 @@ def test_return_car():
 
 
 def test_delete_user():
+    # please check the user id
     response = app.test_client().delete(
         '/register',
-        data=b'{user_id:9}',
+        data=b'{user_id:7}',
         content_type='text/plain',
     )
     assert response.status_code == 200
