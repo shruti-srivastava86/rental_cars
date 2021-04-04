@@ -1,4 +1,4 @@
-from enums import car_category_dict, base_day_rental, kilometer_price
+from enums import car_category_dict, base_day_rental, kilometer_price, car_availability
 
 
 def get_kilometer_diff(start_mileage, end_mileage):
@@ -21,3 +21,9 @@ def return_car(booking_id, end_date_time, mileage, users):
         price = (base_day_rental * days_elapsed * 1.7) + (kilometer_price * kilometer_diff *1.5)
     return price
 
+
+def car_is_available(car_category, booked_cars):
+    total_availibility = car_availability[car_category]
+    if booked_cars < total_availibility:
+        return True
+    return False

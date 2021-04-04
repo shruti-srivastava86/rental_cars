@@ -6,7 +6,14 @@ from models import UserModel, db
 from config import api, app
 import os
 from enums import car_category_dict
-from utils import return_car
+from utils import return_car, car_is_available
+
+
+def get_booked_car_category(car_category):
+    print("In get_booked_car_category")
+    count = UserModel.query.filter(UserModel.car_category == car_category).count()
+    print("count :"+str(count))
+    return (count)
 
 
 def abort_if_booking_number_doesnt_exists(booking_id):
@@ -46,23 +53,27 @@ class Register(Resource):
         existing_user = UserModel.query.filter(
             UserModel.booking_number == booking_number and (UserModel.name == name and UserModel.dob == dob)).first()
         if existing_user:
-            return make_response(f'{name} ({booking_number}) already created!', )
+            return make_response(f'Hi {name} There is already a user with your details!')
         dob = datetime.datetime.strptime(dob, '%Y-%m-%d')
         datetime_rental = date + " " + time
         datetime_rental = datetime.datetime.strptime(datetime_rental, '%Y-%m-%d %H:%M')
         car_category = car_category_dict[int(car_category_key)]
-        user = UserModel(
-            name=name,
-            booking_number=booking_number,
-            dob=dob,
-            car_category=car_category,
-            datetime_rental=datetime_rental,
-            mileage=mileage
-        )
-        db.session.add(user)
-        db.session.commit()
-        return make_response(render_template('success_register.html', name=name, booking_number=booking_number,
-                                             users=UserModel.query.all()), 201)
+        count = get_booked_car_category(car_category)
+        if car_is_available(car_category, count):
+            user = UserModel(
+                name=name,
+                booking_number=booking_number,
+                dob=dob,
+                car_category=car_category,
+                datetime_rental=datetime_rental,
+                mileage=mileage
+            )
+            db.session.add(user)
+            db.session.commit()
+            return make_response(render_template('success_register.html', name=name, booking_number=booking_number,
+                                                 users=UserModel.query.all()), 201)
+        else:
+            return make_response(f'Hi {name}... Please Select Another Car Category... Category {car_category}is Full!')
 
     def get(self):
         headers = {'Content-Type': 'text/html'}
