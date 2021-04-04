@@ -1,0 +1,5 @@
+Flask==1.1.2
+Flask-Restful==0.3.8
+SQLAlchemy==2.5.1
+config==0.5.0
+pytest==2.9.1

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rental Cars</title>
+</head>
+<body>
+    <h1>Rental Cars</h1>
+    <p>
+        This site is a prototype API for registration and return of rental cars.
+    </p>
+    <div>
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <div>
+    <p> <br><br>
+        <a href="{{ url_for('register') }}">Register New User</a>
+    </p>
+    <p>
+        <a href="{{ url_for('return') }}">Return The Car</a>
+    </p>
+    </div>
+    <div><br>
+    <p>
+       User List
+       <table border="1">
+        <tr>
+            <td>User Id</td>
+            <td>Booking Id</td>
+            <td>Name</td>
+            <td>Date of Birth</td>
+            <td>Car Category</td>
+            <td>Date and Time of Rental</td>
+            <td>Mileage</td>
+        </tr>
+        {% for user in users %}
+        <tr>
+            <td>{{user.id}}</td>
+            <td>{{user.booking_number}}</td>
+            <td>{{user.name}}</td>
+            <td>{{user.dob}}</td>
+            <td>{{user.car_category}}</td>
+            <td>{{user.datetime_rental}}</td>
+            <td>{{user.mileage}}</td>
+        </tr>
+        {% endfor %}
+       </table>
+    </p>
+    </div>
+</body>
+</html>
